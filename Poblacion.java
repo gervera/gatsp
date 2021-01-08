@@ -43,6 +43,9 @@ public class Poblacion  {
                 for (int i=0;i<n_genes;i++){
                     do{
                         pos = rnd.nextInt((n_genes*100) + 1);
+                        if(seRepite(posiciones,pos)){
+                            pos = 0;
+                         }
                     }while(pos == 0);
 
                     posiciones[i] = pos;
@@ -124,5 +127,14 @@ public class Poblacion  {
             }
         }
         return pos;
+    }
+
+    private boolean seRepite(int[] posiciones, int pos) {
+        for(int i = 0;i<posiciones.length;i++){
+            if(posiciones[i]==pos){
+                return true;
+            }
+        }
+        return false;
     }
 }
