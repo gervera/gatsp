@@ -9,11 +9,10 @@ public class RutaAG {
         Poblacion Population = new Poblacion(2);
         Random r = new Random();
         
-        //Population.generarPoblacionSinRepetir(10);
+        Population.generarPoblacionSinRepetir(5);
         // imprimir(Population.getIndividuos());
-        //Population.setIndividuos(cruzaCX2(Population.getIndividuos()));
         
-         Cx2();
+         Cx2(Population.getIndividuos(0).getGenesCompleto(), Population.getIndividuos(1).getGenesCompleto());
         //System.out.println(Population.getIndividuos(4).getGen(0));
     }  
     
@@ -38,22 +37,33 @@ public class RutaAG {
         return individuos;
     }
     
-    public static void Cx2(){
-        int [] padre = { 7, 0, 1, 9, 6, 8, 5, 4, 2, 3};
-        int [] madre = { 9, 6, 4, 2, 8, 1, 7, 0, 3, 5};
+    public static void Cx2(int [] padre, int [] madre ){
+//        int [] padre =  { 7, 0, 1, 9, 6, 8, 5, 4, 2, 3}; 
+//        int [] madre =  { 9, 6, 4, 2, 8, 1, 7, 0, 3, 5};
+
+        System.out.println(Arrays.toString(padre));
+        System.out.println(Arrays.toString(madre));
+
+
         int [] hijo = new int [padre.length];
         hijo [0] = madre [0];
-        //System.out.println(hijo[0]);
         
         int indice = hijo[0];
+        int contador;
         for(int i=1;i<hijo.length;i++){
+            
             indice = getIndice(padre,indice);
             hijo[i] = madre[indice];
             indice = hijo[i];
             
-            if(getIndice(hijo,indice) != -1){
-                indice = corregirIndice(padre,hijo,indice, i);
+            contador = 0 ;
+            while(contiene(hijo,indice,i)){
+                indice=padre[contador];
+                
+                //System.out.println(indice +"=> "+ contador);
+                contador++;
             }
+            
         }
         System.out.println(Arrays.toString(hijo));
     }
@@ -66,19 +76,15 @@ public class RutaAG {
         }
         return -1;
     }
-
-    public static int corregirIndice(int[] padre, int[] hijo, int ind, int i) {
-       
-       int cnt = 0;
-       do{
-           ind = padre[cnt];
-           System.out.println(ind);
-           cnt++;
-       }while(getIndice(hijo,ind) != -1 || cnt<i);
-       
-       
-       return ind;
+    
+    public static boolean contiene(int [] arr, int num, int pos){
+        for(int i=0;i<pos;i++){
+            if(arr[i] == num){
+                return true;
+            }
+        }
+        return false;
     }
     
-    
+
 }
