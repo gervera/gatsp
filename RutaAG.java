@@ -9,7 +9,7 @@ public class RutaAG {
         Poblacion Population = new Poblacion(2);
         Random r = new Random();
         
-        Population.generarPoblacionSinRepetir(5);
+        Population.generarPoblacionSinRepetir(10);
         // imprimir(Population.getIndividuos());
         
          Cx2(Population.getIndividuos(0).getGenesCompleto(), Population.getIndividuos(1).getGenesCompleto());
@@ -37,54 +37,49 @@ public class RutaAG {
         return individuos;
     }
     
-    public static void Cx2(int [] padre, int [] madre ){
+    public static void Cx2(int [] dad, int [] mom ){
 //        int [] padre =  { 7, 0, 1, 9, 6, 8, 5, 4, 2, 3}; 
 //        int [] madre =  { 9, 6, 4, 2, 8, 1, 7, 0, 3, 5};
 
-        System.out.println(Arrays.toString(padre));
-        System.out.println(Arrays.toString(madre));
+        System.out.println(Arrays.toString(dad));
+        System.out.println(Arrays.toString(mom));
 
-
-        int [] hijo = new int [padre.length];
-        hijo [0] = madre [0];
+        int [] son = new int [dad.length];
+        son [0] = mom [0]; // Validar Aqui.
         
-        int indice = hijo[0];
-        int contador;
-        for(int i=1;i<hijo.length;i++){
-            
-            indice = getIndice(padre,indice);
-            hijo[i] = madre[indice];
-            indice = hijo[i];
-            
-            contador = 0 ;
-            while(contiene(hijo,indice,i)){
-                indice=padre[contador];
-                
-                //System.out.println(indice +"=> "+ contador);
-                contador++;
+        int index = 1;
+        int sonValue = son[0];
+        int counter;       
+        
+        while (index < son.length ){
+            counter = 1;
+            sonValue = mom[getIndex(dad,sonValue)];
+            while(contains(son,sonValue,index)){
+                sonValue= mom[getIndex(dad,dad[counter])];
+                counter++;
             }
-            
+            son[index] = sonValue; 
+            index+=1;
         }
-        System.out.println(Arrays.toString(hijo));
+
+        System.out.println(Arrays.toString(son));
     }
     
-    public static int getIndice(int [] arr, int num){
-        for(int p=0;p<arr.length;p++){
-            if( arr[p] == num ){
-                return p;
+    public static int getIndex(int [] arr, int num){
+        for(int position=0;position<arr.length;position++){
+            if( arr[position] == num ){
+                return position;
             }
         }
         return -1;
     }
     
-    public static boolean contiene(int [] arr, int num, int pos){
+    public static boolean contains(int [] arr, int num, int pos){
         for(int i=0;i<pos;i++){
             if(arr[i] == num){
                 return true;
             }
         }
         return false;
-    }
-    
-
+    }  
 }
