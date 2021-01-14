@@ -12,7 +12,8 @@ public class RutaAG {
         Population.generarPoblacionSinRepetir(10);
         // imprimir(Population.getIndividuos());
         
-         Cx2(Population.getIndividuos(0).getGenesCompleto(), Population.getIndividuos(1).getGenesCompleto());
+         //Cx2(Population.getIndividuos(0).getGenesCompleto(), Population.getIndividuos(1).getGenesCompleto());
+         exchangeValue(Population.getIndividuos(0).getGenesCompleto());
         //System.out.println(Population.getIndividuos(4).getGen(0));
     }  
     
@@ -38,12 +39,6 @@ public class RutaAG {
     }
     
     public static void Cx2(int [] dad, int [] mom ){
-//        int [] padre =  { 7, 0, 1, 9, 6, 8, 5, 4, 2, 3}; 
-//        int [] madre =  { 9, 6, 4, 2, 8, 1, 7, 0, 3, 5};
-
-        System.out.println(Arrays.toString(dad));
-        System.out.println(Arrays.toString(mom));
-
         int [] son = new int [dad.length];
         son [0] = mom [0]; // Validar Aqui.
         
@@ -61,8 +56,26 @@ public class RutaAG {
             son[index] = sonValue; 
             index+=1;
         }
-
-        System.out.println(Arrays.toString(son));
+    }
+    
+    public static void exchangeValue(int [] arr){
+        Random rnd = new Random();
+        int position_1;
+        int position_2;
+        int value;
+        do {
+            position_1 = rnd.nextInt(arr.length);
+            position_2 = rnd.nextInt(arr.length);
+        }while(position_1 == position_2);
+        
+        System.out.println(Arrays.toString(arr));
+        System.out.println(position_1 + " " + position_2);
+        
+        value = arr[position_1];
+        arr[position_1] = arr[position_2];
+        arr[position_2] = value;
+        
+        System.out.println(Arrays.toString(arr));
     }
     
     public static int getIndex(int [] arr, int num){
