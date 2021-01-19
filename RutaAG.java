@@ -2,49 +2,52 @@
 package rutaag;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class RutaAG {
 
     public static void main(String[] args) {
-        int numeroDeIndividuos   = 50;
+        
+        int numeroDeIndividuos   = 6;
         int numeroDeGeneraciones = 20;
         double indiceDeCruza     = 0.80;
         Poblacion Population = new Poblacion(numeroDeIndividuos);
-        
-        for( byte generacion = 0 ; generacion<numeroDeGeneraciones ; generacion++ ){
-            
-            Individuo [] nuevaPoblacion = Population.getIndividuos();
-            Random rnd = new Random();
-            
-            for( byte contador = 0 ; contador < numeroDeIndividuos ; contador++){
-                 
-                double porcentajeDeCruza = rnd.nextDouble() * 1;
-                
-                if( porcentajeDeCruza < indiceDeCruza ) {
-                    int primeraPosicionDeCruza,
-                        segundaPosicionDeCruza;
-               
-                    do {
-                        primeraPosicionDeCruza = rnd.nextInt(numeroDeIndividuos);
-                        segundaPosicionDeCruza = rnd.nextInt(numeroDeIndividuos);
-                      } while ( primeraPosicionDeCruza == segundaPosicionDeCruza );
-                      
-                    int [] individuoUno = nuevaPoblacion[primeraPosicionDeCruza].getGenesCompleto();
-                    int [] individuoDos = nuevaPoblacion[segundaPosicionDeCruza].getGenesCompleto();
-               
-                    individuoUno = cruzaPorCX2(individuoUno,individuoDos);
-                    individuoDos = cruzaPorCX2(individuoDos,individuoUno);
-                    
-                    nuevaPoblacion[primeraPosicionDeCruza].setGenes(individuoUno);
-                    nuevaPoblacion[segundaPosicionDeCruza].setGenes(individuoDos);
-                    
-                }
-            }
-        }
-        
-        Population.generarPoblacionSinRepetir(10);
-        //imprimir(Population.getIndividuos());
-        
+        Population.generarPoblacionSinRepetir(6);
+        imprimir(Population.getIndividuos());
+        int [][] distancias = llenar(6);
+        System.out.println("Aptitud: "+calcularAptitud(Population.getIndividuos(0).getGenesCompleto(),distancias) + "\n");
+//        for( byte generacion = 0 ; generacion<numeroDeGeneraciones ; generacion++ ){
+//            
+//            Individuo [] nuevaPoblacion = Population.getIndividuos();
+//            Random rnd = new Random();
+//            
+//            for( byte contador = 0 ; contador < numeroDeIndividuos ; contador++){
+//                 
+//                double porcentajeDeCruza = rnd.nextDouble() * 1;
+//                
+//                if( porcentajeDeCruza < indiceDeCruza ) {
+//                    int primeraPosicionDeCruza,
+//                        segundaPosicionDeCruza;
+//               
+//                    do {
+//                        primeraPosicionDeCruza = rnd.nextInt(numeroDeIndividuos);
+//                        segundaPosicionDeCruza = rnd.nextInt(numeroDeIndividuos);
+//                      } while ( primeraPosicionDeCruza == segundaPosicionDeCruza );
+//                      
+//                    int [] individuoUno = nuevaPoblacion[primeraPosicionDeCruza].getGenesCompleto();
+//                    int [] individuoDos = nuevaPoblacion[segundaPosicionDeCruza].getGenesCompleto();
+//                    
+//                    int [] aux = individuoUno;
+//                    individuoUno = cruzaPorCX2(individuoUno,individuoDos);
+//                    individuoDos = cruzaPorCX2(individuoDos,aux);
+//                    
+//                    nuevaPoblacion[primeraPosicionDeCruza].setGenes(individuoUno);
+//                    nuevaPoblacion[segundaPosicionDeCruza].setGenes(individuoDos);
+//                }
+//            }
+//        }
+//        imprimir(Population.getIndividuos());
+
         //cruzaPorCX2(Population.getIndividuos(0).getGenesCompleto(), Population.getIndividuos(1).getGenesCompleto());
         //exchangeValue(Population.getIndividuos(0).getGenesCompleto());
         //System.out.println(Population.getIndividuos(4).getGen(0));
@@ -59,7 +62,7 @@ public class RutaAG {
 				System.out.print(num[j] + " ");
 			}
 		}
-		System.out.print("\n");
+		System.out.println(" ");
 	}
 
     private static Individuo[] cruzaCX2(Individuo[] individuos) {
@@ -131,4 +134,41 @@ public class RutaAG {
     private static Individuo[] tournamentSelection(Individuo[] individuos) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    private static int[][] llenar(int t) {
+        int [][] distancias = new int [t][t];
+        Random rnd = new Random();
+        System.out.println(" ");
+        for(int i = 0; i<t;i++ ){
+            System.out.print("= " + i + " => ");
+            for(int j=0;j<t;j++){
+                if(i==j){
+                    distancias[i][j] = 0;
+                }else{
+                    distancias[i][j] = rnd.nextInt(10000) + 1;
+                }
+                System.out.print(distancias[i][j]+" ");
+            }
+            System.out.println(" ");
+        }
+        System.out.println(" ");
+        return distancias;
+    }
+    
+    public static int calcularAptitud(int [] arr, int [][] distancias){
+        int aptitud = 0;
+        System.out.println(Arrays.toString(arr));
+        for(int i=0;i<arr.length;i++){
+            if(i==arr.length-1){
+                System.out.println(distancias[arr[i]][arr[0]]);
+                aptitud = aptitud + distancias[arr[i]][arr[0]];
+            }else{
+                System.out.println(distancias[arr[i]][arr[i+1]]);
+                aptitud = aptitud + distancias[arr[i]][arr[i+1]];
+            }
+        }
+        return aptitud;
+    }
+
+
 }
